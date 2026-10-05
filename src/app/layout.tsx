@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 
 // Load Inter font for non-Apple devices
 const inter = Inter({
@@ -81,6 +82,7 @@ export default function RootLayout({
         <main className="flex min-h-screen flex-col">{children}</main>
         <Toaster theme="dark" />
         <DevtoolsGuard />
+        <Analytics />
       </body>
     </html>
   );
