@@ -17,7 +17,7 @@ import {
   useTransform,
   type Variants,
 } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LockKeyhole } from 'lucide-react';
 import {
   useCallback,
   useEffect,
@@ -209,6 +209,20 @@ export default function Home() {
               </motion.div>
             )}
           </motion.div>
+
+          {/* Privacy, in one quiet line. Accurate on purpose: the chat lives in this tab's
+              sessionStorage and the server keeps nothing (messages only pass through to the AI). */}
+          <motion.p
+            variants={revealItem}
+            className="text-muted-foreground/80 mt-4 flex items-center gap-1.5 text-center text-xs"
+          >
+            <LockKeyhole
+              className="size-3 shrink-0"
+              strokeWidth={1.75}
+              aria-hidden="true"
+            />
+            Your chat stays in this tab. Nothing is saved on my side.
+          </motion.p>
         </motion.div>
       </section>
 
