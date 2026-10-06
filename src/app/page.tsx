@@ -153,7 +153,8 @@ export default function Home() {
       >
         <div
           aria-hidden
-          className="to-background pointer-events-none absolute inset-x-0 -top-32 h-32 bg-linear-to-b from-transparent"
+          // Blends into the hero; kept short so it doesn't dim the hero's "Ask me anything" pill.
+          className="to-background pointer-events-none absolute inset-x-0 -top-16 h-16 bg-linear-to-b from-transparent"
         />
         <motion.div
           variants={revealContainer}

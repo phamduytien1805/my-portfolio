@@ -55,10 +55,11 @@ interface Box {
   y1: number;
 }
 
-const POUR = 0.3;
-const POUR_LAST = 0.5;
-const HOLD = 0.55;
-const FADE = 0.22;
+// Seconds per greeting: pour in, hold, fade (about 0.82 s each; then the final line pours in).
+const POUR = 0.24;
+const POUR_LAST = 0.4;
+const HOLD = 0.4;
+const FADE = 0.18;
 const INK_AMOUNT = 0.85;
 const HEAL_RATE = 4;
 
