@@ -9,6 +9,7 @@ export type AnalyticsEvent =
   | 'hero_scroll' // left the greeting for the chat section
   | 'chat_opened'
   | 'message_sent'
+  | 'slash_command'
   | 'limit_reached'
   | 'game_started'
   | 'game_finished';

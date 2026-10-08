@@ -608,7 +608,12 @@ export default function ImessageChat({
   // Send a message: to the AI when it's reachable, otherwise answer with the auto-reply.
   // `command` is set when it came from a slash command, or the question clearly asks for one
   // (tagged so its reply is shown in that tool's card).
-  const sendText = (raw: string, slashCommand?: Command) => {
+  // `via`: how a slash command was run (its quick-action button, or typed in the input).
+  const sendText = (
+    raw: string,
+    slashCommand?: Command,
+    via?: 'button' | 'typed'
+  ) => {
     const text = raw.trim();
     if (!text || busy) return;
     setInput('');
@@ -620,6 +625,11 @@ export default function ImessageChat({
       kind: slashCommand ? 'command' : command ? 'recognised' : 'free',
       command: command ?? 'none',
     });
+    if (slashCommand)
+      trackEvent('slash_command', {
+        command: slashCommand,
+        via: via ?? 'button',
+      });
     const id = command ? commandId(command) : generateId();
     const staticReply = command && STATIC_COMMANDS[command];
     if (staticReply) {
@@ -1037,7 +1047,8 @@ export default function ImessageChat({
                   if (typedCommand)
                     sendText(
                       typedCommand.prompt,
-                      typedCommand.command.slice(1) as Command
+                      typedCommand.command.slice(1) as Command,
+                      'typed'
                     );
                   else sendText(input);
                 }}
@@ -1090,7 +1101,8 @@ export default function ImessageChat({
                             onClick={() =>
                               sendText(
                                 action.prompt,
-                                action.command.slice(1) as Command
+                                action.command.slice(1) as Command,
+                                'button'
                               )
                             }
                             className="h-8 shrink-0 rounded-full px-2 font-mono text-[11.5px] text-neutral-300 transition-colors hover:bg-white/[0.09] hover:text-white focus-visible:outline-2 focus-visible:outline-blue-600 disabled:opacity-50 sm:px-3.5 sm:text-[13px]"
