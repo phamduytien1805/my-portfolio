@@ -1,6 +1,7 @@
 'use client';
 
 import { startInkIntro, type InkWord } from '@/lib/ink-intro';
+import { trackEvent } from '@/lib/analytics';
 import { ChevronDown } from 'lucide-react';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import { useEffect, useRef, useState } from 'react';
@@ -82,6 +83,7 @@ export default function InkIntro({
     window.addEventListener('scroll', onScroll, { passive: true });
     timer = window.setTimeout(() => {
       removeListeners();
+      trackEvent('hero_scroll', { how: 'auto' });
       onScrollDownRef.current?.();
     }, AUTO_SCROLL_MS);
     return cancel;
@@ -140,7 +142,10 @@ export default function InkIntro({
             (the old tiny grey hint went unnoticed). No box around it. */}
         <button
           type="button"
-          onClick={onScrollDown}
+          onClick={() => {
+            trackEvent('hero_scroll', { how: 'arrow' });
+            onScrollDown?.();
+          }}
           tabIndex={finalShown ? 0 : -1}
           className={`group absolute bottom-16 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 text-base font-medium tracking-wide whitespace-nowrap text-[#f4efe6] transition-opacity duration-700 [text-shadow:0_0_18px_rgba(244,239,230,0.45)] md:text-lg ${
             finalShown ? 'pointer-events-auto opacity-100' : 'opacity-0'

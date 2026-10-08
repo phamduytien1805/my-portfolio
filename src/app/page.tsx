@@ -26,6 +26,7 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { trackEvent } from '@/lib/analytics';
 
 /* ---------- scroll-reveal animations ---------- */
 const revealContainer: Variants = {
@@ -94,6 +95,7 @@ export default function Home() {
   }, []);
 
   const openChat = () => {
+    trackEvent('chat_opened');
     setChatOpen(true);
     if (window.location.hash !== CHAT_HASH)
       window.history.pushState({ chat: true }, '', CHAT_HASH);

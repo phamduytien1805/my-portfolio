@@ -1,4 +1,5 @@
 import { DevtoolsGuard } from '@/components/devtools-guard';
+import { EngagementTracker } from '@/components/engagement-tracker';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -84,6 +85,7 @@ export default function RootLayout({
         <Toaster theme="dark" />
         <DevtoolsGuard />
         <Analytics />
+        <EngagementTracker />
         <SpeedInsights />
       </body>
     </html>

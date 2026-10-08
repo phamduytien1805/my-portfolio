@@ -21,6 +21,7 @@ const PRODUCT_PAGES: Page[] = career
   .map((role) => ({ url: role.link!, title: role.product, app: role.app }));
 import { FlashlightGame } from './FlashlightGame';
 import { FocusedReply } from './FocusedReply';
+import { trackEvent } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import { useChat } from '@ai-sdk/react';
 import { generateId, type Message } from 'ai';
@@ -518,6 +519,7 @@ export default function ImessageChat({
       return;
     }
     const values = current.game?.values ?? shuffled(GAME_VALUES);
+    trackEvent('game_started');
     setUsage({ ...current, game: { values, finished: false } });
     setGame({ values });
   };
@@ -535,6 +537,7 @@ export default function ImessageChat({
     if (!played) return;
     const sum = found.reduce((total, i) => total + (played.values[i] ?? 0), 0);
     const granted = Math.max(0, sum);
+    trackEvent('game_finished', { found: found.length, granted });
     const current = loadUsage();
     setUsage({
       ...current,
@@ -611,6 +614,12 @@ export default function ImessageChat({
     setInput('');
     followRef.current = true; // your own message: back to the bottom
     const command = slashCommand ?? intentOf(text);
+    // What kind of message (never its text): a slash command, a question the chat recognised
+    // as one, or a free question.
+    trackEvent('message_sent', {
+      kind: slashCommand ? 'command' : command ? 'recognised' : 'free',
+      command: command ?? 'none',
+    });
     const id = command ? commandId(command) : generateId();
     const staticReply = command && STATIC_COMMANDS[command];
     if (staticReply) {
@@ -630,6 +639,7 @@ export default function ImessageChat({
     // Out of AI messages: the cooked reply (and, once, the flashlight game) instead of the AI.
     const current = loadUsage();
     if (current.count >= current.allowance) {
+      trackEvent('limit_reached');
       setUsage(current);
       setMessages((prev) => [
         ...prev,
